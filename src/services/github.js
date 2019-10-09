@@ -15,7 +15,7 @@ module.exports = function createClient(installationId) {
         installationId,
       })
 
-      return `token ${installationAccessToken}`
+      return installationAccessToken
     },
   })
 

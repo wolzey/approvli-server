@@ -20,11 +20,21 @@ eventRouter.post('/', async (req, res) => {
 
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
 
-  githubClient.apps.createInstallationToken({
-    installation_id: installation.id,
-  })
+  const response = await githubClient.checks.create({
+    owner: 'wolzey',
+    repo: 'approvli-server',
+    status: 'in_progress',
+    name: 'designer-approval',
+    head_sha: pull_request.head.sha,
+    output: {
+      title: 'Design Approval',
+      summary: 'Waiting on designer approval',
+      text: `We have sent a request to a designer to check this PR once approved you
+         will be notified.
 
-  const response = await githubClient.apps.getAuthenticated()
+         ## This is a heading`,
+    },
+  })
 
   console.log(response)
   // If Designer requested we use the api to create a new check

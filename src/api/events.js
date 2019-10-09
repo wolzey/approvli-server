@@ -1,28 +1,30 @@
 const eventRouter = require('express').Router()
-const { createCheck } = require('../services/checks')
+const github = require('../services/github')
 
 const WATCHABLE_EVENTS = ['pull_request']
 
 eventRouter.post('/', async (req, res) => {
   const event = req.header('X-GitHub-Event')
   const body = req.body
+  const { pull_request, repository, installation } = body
+
+  const githubClient = github(installation.id)
 
   if (!WATCHABLE_EVENTS.includes(event)) return res.json('event not supported')
 
   const hasDesignLabel =
-    req.body.labels &&
-    req.body.labels.find(
+    pull_request.labels &&
+    pull_request.labels.find(
       label => label.name.toLowerCase() === 'designer review requested'
     )
 
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
 
-  const response = await createCheck({
-    status: 'in_progress',
-    head_sha: body.head.sha,
-    owner: body.repo.owner,
-    repo: body.repo,
+  githubClient.apps.createInstallationToken({
+    installation_id: installation.id,
   })
+
+  const response = await githubClient.apps.getAuthenticated()
 
   console.log(response)
   // If Designer requested we use the api to create a new check

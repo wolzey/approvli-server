@@ -20,6 +20,7 @@ eventRouter.post('/', async (req, res) => {
 
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
 
+  // Needs to create check in DB, initialization will create this.
   const response = await githubClient.checks.create({
     owner: 'wolzey',
     repo: 'approvli-server',

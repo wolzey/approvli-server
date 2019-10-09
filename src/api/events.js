@@ -3,7 +3,7 @@ const { createCheck } = require('../services/checks')
 
 const WATCHABLE_EVENTS = ['pull_request']
 
-eventRouter.post('/', (req, res) => {
+eventRouter.post('/', async (req, res) => {
   const event = req.header('X-GitHub-Event')
   const body = req.body
 
@@ -17,13 +17,14 @@ eventRouter.post('/', (req, res) => {
 
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
 
-  createCheck({
+  const response = await createCheck({
     status: 'in_progress',
     head_sha: body.head.sha,
     owner: body.repo.owner,
     repo: body.repo,
   })
 
+  console.log(response)
   // If Designer requested we use the api to create a new check
   // Check is in progress
   // Send notitification to Slack

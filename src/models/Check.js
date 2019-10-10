@@ -100,6 +100,7 @@ CheckSchema.methods.runUpdateChecks = async function() {
   })
 }
 
+// Creates check in github
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id)
   const {

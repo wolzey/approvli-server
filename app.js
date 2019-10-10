@@ -4,6 +4,12 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const logger = require('morgan')
 const passport = require('passport')
+const mongoose = require('mongoose')
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/approvli', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
 
 const app = express()
 

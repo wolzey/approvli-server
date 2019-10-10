@@ -1,7 +1,7 @@
 const eventRouter = require('express').Router()
 const github = require('../services/github')
 const Check = require('../models/Check')
-// Hi
+
 const WATCHABLE_EVENTS = ['pull_request']
 
 eventRouter.post('/', async (req, res) => {

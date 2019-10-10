@@ -68,8 +68,7 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
     } else {
       await check.runUpdateChecks()
       check.updateOne(data, async () => {
-        console.log('UPDATED', check)
-        check.sendToGithub()
+        await check.sendToGithub()
       })
     }
   })
@@ -100,6 +99,8 @@ CheckSchema.methods.sendToGithub = async function() {
     summary: this.summary,
     name: this.name,
   })
+
+  console.log('CHECK ID', id)
 
   this.check_run_id = id
   this.save()

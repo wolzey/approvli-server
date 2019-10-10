@@ -145,8 +145,6 @@ CheckSchema.methods.sendToGithub = async function() {
   this.save()
 }
 
-CheckSchema.methods.sendSlackNotification = function() {}
-
 CheckSchema.methods.updateInGithub = function() {}
 
 module.exports = new mongoose.model('Check', CheckSchema)

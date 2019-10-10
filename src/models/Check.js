@@ -67,7 +67,7 @@ CheckSchema.pre('save', async function(next) {
 })
 
 CheckSchema.methods.sendSlackNotification = async function() {
-  await axios.post(process.env.SLACK_WEBHOOK_ENDPOINT, {
+  return await axios.post(process.env.SLACK_WEBHOOK_ENDPOINT, {
     text: `
         Hello! You have a new review request on ${this.owner.login}'s PR.
         Please access it here https://approvli.herokuapp.com/checks/${this._id}`,

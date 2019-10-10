@@ -46,11 +46,12 @@ eventRouter.post('/', async (req, res) => {
       upsert: true,
       useFindAndModify: false,
     },
-    err => {
+    (err, check) => {
       if (err) {
         return res.status(500).json(err)
       }
 
+      check.sendToGithub()
       res.status(200).json('ok')
     }
   )

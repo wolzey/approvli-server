@@ -53,19 +53,9 @@ const CheckSchema = new Schema({
 })
 
 CheckSchema.path('head_sha').set(function() {
+  console.log(this.head_sha)
   const originalSha = this.head_sha
   this._head_sha = originalSha
-})
-
-CheckSchema.pre('validate', async function(next) {
-  console.log('HIIII')
-  const { id } = await this.sendToGithub()
-  console.log(id)
-  await this.runUpdateChecks()
-
-  this.id = id
-
-  next()
 })
 
 CheckSchema.methods.runUpdateChecks = async function() {
@@ -84,7 +74,7 @@ CheckSchema.methods.runUpdateChecks = async function() {
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id)
 
-  return await client.checks.create({
+  const { id } = await client.checks.create({
     head_sha: this.head_sha,
     owner: this.owner.login,
     repo: this.repo,
@@ -93,6 +83,11 @@ CheckSchema.methods.sendToGithub = async function() {
     summary: this.summary,
     name: this.name,
   })
+
+  await this.runUpdateChecks()
+
+  this.check_run_id = id
+  this.save()
 }
 
 CheckSchema.methods.sendSlackNotification = function() {}

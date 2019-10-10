@@ -41,8 +41,7 @@ eventRouter.post('/', async (req, res) => {
     },
     (err, check) => {
       if (err) {
-        throw err
-        // return res.status(500).json(err)
+        return res.status(500).json(err)
       }
 
       console.log('check', check)

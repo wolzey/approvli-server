@@ -70,11 +70,12 @@ CheckSchema.methods.runUpdateChecks = async function() {
 
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id)
-
+  console.log('SENDING TO GITHUB')
   if (this.check_run_id) {
     await this.runUpdateChecks()
   }
 
+  console.log('CREATING NEW CHECK')
   const { id } = await client.checks.create({
     head_sha: this.head_sha,
     owner: this.owner.login,

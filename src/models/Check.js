@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const github = require('../services/github')
+const axios = require('axios')
 
 const Schema = mongoose.Schema
 
@@ -54,6 +55,23 @@ const CheckSchema = new Schema({
     required: true,
   },
 })
+
+CheckSchema.pre('save', async function(next) {
+  if (this.isNew) {
+    console.log('SENDING NOTIFICATION')
+    this.sendSlackNotification()
+  }
+
+  next()
+})
+
+CheckSchema.methods.sendSlackNotification = async function() {
+  await axios.post(process.env.SLACK_WEBHOOK_ENDPOINT, {
+    text: `
+        Hello! You have a new review request on ${this.owner.login}'s PR.
+        Please access it here https://approvli.herokuapp.com/checks/${this._id}`,
+  })
+}
 
 CheckSchema.statics.findOrCreate = async function(query, data) {
   const _this = this

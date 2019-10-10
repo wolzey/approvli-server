@@ -52,6 +52,33 @@ const CheckSchema = new Schema({
   },
 })
 
+CheckSchema.path('head_sha').set(function() {
+  const originalSha = this.head_sha
+  this._head_sha = originalSha
+})
+
+CheckSchema.pre('save', async function(next) {
+  const { id } = await this.sendToGithub()
+  await this.runUpdateChecks()
+
+  this.id = id
+
+  next()
+})
+
+CheckSchema.methods.runUpdateChecks = async function() {
+  if (this.status !== 'in_progress') return
+  const client = github(this.installation_id)
+
+  await client.checks.update({
+    owner: this.owner.login,
+    repo: this.repo,
+    check_run_id: this.id,
+    conclusion: 'cancelled',
+    status: 'completed',
+  })
+}
+
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id)
 

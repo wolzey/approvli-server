@@ -21,7 +21,10 @@ eventRouter.post('/', async (req, res) => {
 
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
   // Needs to create check in DB, initialization will create this.
-  Check.create(
+  Check.findOneAndUpdate(
+    {
+      'pull_request.id': pull_request.id,
+    },
     {
       pull_request: {
         id: pull_request.id,
@@ -39,14 +42,13 @@ eventRouter.post('/', async (req, res) => {
           'We have sent a request to design. Once approved this check will update with their response.',
       },
     },
-    (err, check) => {
+    {
+      upsert: true,
+    },
+    err => {
       if (err) {
         return res.status(500).json(err)
       }
-
-      console.log('check', check)
-
-      check.sendToGithub()
 
       res.status(200).json('ok')
     }

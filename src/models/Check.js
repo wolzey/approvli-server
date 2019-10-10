@@ -67,6 +67,7 @@ CheckSchema.pre('save', async function(next) {
 })
 
 CheckSchema.methods.sendSlackNotification = async function() {
+  console.log(process.env.SLACK_WEBHOOK_ENDPOINT)
   return await axios({
     method: 'POST',
     url: process.env.SLACK_WEBHOOK_ENDPOINT,

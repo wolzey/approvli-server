@@ -9,7 +9,6 @@ const app = new App({
 
 module.exports = function createClient(installationId) {
   const octokit = new Octokit({
-    log: console,
     async auth() {
       const installationAccessToken = await app.getInstallationAccessToken({
         installationId,

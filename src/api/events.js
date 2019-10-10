@@ -1,5 +1,6 @@
 const eventRouter = require('express').Router()
 const github = require('../services/github')
+const Check = require('../models/Check')
 
 const WATCHABLE_EVENTS = ['pull_request']
 
@@ -19,31 +20,44 @@ eventRouter.post('/', async (req, res) => {
     )
 
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
-
-  const response = await githubClient.checks.create({
-    owner: 'wolzey',
-    repo: 'approvli-server',
-    status: 'in_progress',
-    name: 'designer-approval',
-    head_sha: pull_request.head.sha,
-    output: {
-      title: 'Design Approval',
-      summary: 'Waiting on designer approval',
-      text: `We have sent a request to a designer to check this PR once approved you
-         will be notified.
-
-         ## This is a heading`,
+  // Needs to create check in DB, initialization will create this.
+  Check.create(
+    {
+      pull_request: {
+        id: pull_request.id,
+        body: pull_request.body,
+      },
+      owner: pull_request.head.repo.owner,
+      repo: pull_request.head.repo.name,
+      status: 'in_progress',
+      head_sha: pull_request.head.sha,
+      installation_id: installation.id,
+      output: {
+        title: 'Waiting on Design Approval',
+        summary: 'Needs approval from a designer',
+        text:
+          'We have sent a request to design. Once approved this check will update with their response.',
+      },
     },
-  })
+    (err, check) => {
+      if (err) {
+        throw err
+        // return res.status(500).json(err)
+      }
 
-  console.log(response)
+      console.log('check', check)
+
+      check.sendToGithub()
+
+      res.status(200).json('ok')
+    }
+  )
+
   // If Designer requested we use the api to create a new check
   // Check is in progress
   // Send notitification to Slack
   // Once Kevin (designer approves) - Change status to his selection
   // Add PR comments if any
-
-  res.status(200).json('ok')
 })
 
 module.exports = eventRouter

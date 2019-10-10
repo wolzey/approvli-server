@@ -67,14 +67,15 @@ CheckSchema.pre('save', async function(next) {
 })
 
 CheckSchema.methods.sendSlackNotification = async function() {
-  return await axios
-    .post(process.env.SLACK_WEBHOOK_ENDPOINT, {
+  return await axios({
+    method: 'POST',
+    url: process.env.SLACK_WEBHOOK_ENDPOINT,
+    data: {
       text: `
         Hello! You have a new review request on ${this.owner.login}'s PR.
         Please access it here https://approvli.herokuapp.com/checks/${this._id}`,
-    })
-    .then(data => console.log(data))
-    .catch(err => console.log(err))
+    },
+  })
 }
 
 CheckSchema.statics.findOrCreate = async function(query, data) {

@@ -67,10 +67,11 @@ CheckSchema.pre('save', async function(next) {
 })
 
 CheckSchema.methods.sendSlackNotification = async function() {
-  console.log(process.env.SLACK_WEBHOOK_ENDPOINT)
+  console.log('sending')
   return await axios({
     method: 'POST',
-    url: process.env.SLACK_WEBHOOK_ENDPOINT,
+    url:
+      'https://hooks.slack.com/services/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',
     data: {
       text: `
         Hello! You have a new review request on ${this.owner.login}'s PR.

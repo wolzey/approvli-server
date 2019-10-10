@@ -44,6 +44,7 @@ eventRouter.post('/', async (req, res) => {
     },
     {
       upsert: true,
+      useFindAndModify: false,
     },
     err => {
       if (err) {

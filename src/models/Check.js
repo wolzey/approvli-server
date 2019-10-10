@@ -55,6 +55,25 @@ const CheckSchema = new Schema({
   },
 })
 
+CheckSchema.statics.findOrCreate = async function(query, data) {
+  const _this = this
+  return this.findOne(query, async function(err, check) {
+    if (err) throw err
+    if (!check) {
+      _this.create(data, (err, newCheck) => {
+        if (err) throw err
+        newCheck.sendToGithub()
+        return data
+      })
+    } else {
+      await check.runUpdateChecks()
+      check.update(data, async () => {
+        check.sendToGithub()
+      })
+    }
+  })
+}
+
 CheckSchema.methods.runUpdateChecks = async function() {
   if (this.status !== 'in_progress') return
   const client = github(this.installation_id)
@@ -68,12 +87,6 @@ CheckSchema.methods.runUpdateChecks = async function() {
   })
 }
 
-CheckSchema.pre('update', async function(next) {
-  console.log('UPDATING....')
-  await this.sendToGithub()
-  next()
-})
-
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id)
   const { id } = await client.checks.create({
@@ -85,10 +98,6 @@ CheckSchema.methods.sendToGithub = async function() {
     summary: this.summary,
     name: this.name,
   })
-
-  if (this.check_run_id) {
-    await this.runUpdateChecks()
-  }
 
   this.check_run_id = id
   this.save()

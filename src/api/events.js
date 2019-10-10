@@ -22,7 +22,7 @@ eventRouter.post('/', async (req, res) => {
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
   // Needs to create check in DB, initialization will create this.
 
-  Check.findOneAndUpdate(
+  await Check.findOrCreate(
     {
       'pull_request.id': pull_request.id,
     },
@@ -42,20 +42,10 @@ eventRouter.post('/', async (req, res) => {
         text:
           'We have sent a request to design. Once approved this check will update with their response.',
       },
-    },
-    {
-      upsert: true,
-      useFindAndModify: false,
-    },
-    err => {
-      if (err) {
-        return res.status(500).json(err)
-      }
-
-      res.status(200).json('ok')
     }
   )
 
+  res.json('ok')
   // If Designer requested we use the api to create a new check
   // Check is in progress
   // Send notitification to Slack

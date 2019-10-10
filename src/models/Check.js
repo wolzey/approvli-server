@@ -59,8 +59,8 @@ const CheckSchema = new Schema({
 CheckSchema.pre('save', async function(next) {
   console.log('HI')
   // if (this.isNew) {
-  console.log('SENDING NOTIFICATION')
-  await this.sendSlackNotification()
+  const response = await this.sendSlackNotification()
+  console.log(response)
   // }
 
   next()

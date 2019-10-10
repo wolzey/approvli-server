@@ -66,6 +66,7 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
         return data
       })
     } else {
+      console.log('hi')
       await check.runUpdateChecks()
       check.update(data, async () => {
         check.sendToGithub()
@@ -75,13 +76,14 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
 }
 
 CheckSchema.methods.runUpdateChecks = async function() {
+  if (!this.check_run_id) return
   if (this.status !== 'in_progress') return
   const client = github(this.installation_id)
 
   await client.checks.update({
     owner: this.owner.login,
     repo: this.repo,
-    check_run_id: this.id,
+    check_run_id: this.check_run_id,
     conclusion: 'cancelled',
     status: 'completed',
   })

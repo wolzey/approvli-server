@@ -38,8 +38,8 @@ eventRouter.post('/', async (req, res) => {
     },
     (err, check) => {
       if (err) {
-        console.log(err)
-        return res.status(500).json(err)
+        throw err
+        // return res.status(500).json(err)
       }
 
       check.sendToGithub()

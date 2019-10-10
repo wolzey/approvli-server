@@ -68,8 +68,9 @@ CheckSchema.methods.runUpdateChecks = async function() {
   })
 }
 
-CheckSchema.pre('save', function(next) {
-  console.log('PRE SAVE HOOK')
+CheckSchema.pre('update', async function(next) {
+  console.log('UPDATING....')
+  await this.sendToGithub()
   next()
 })
 

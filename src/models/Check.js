@@ -52,12 +52,6 @@ const CheckSchema = new Schema({
   },
 })
 
-CheckSchema.path('head_sha').set(function() {
-  console.log(this.head_sha)
-  const originalSha = this.head_sha
-  this._head_sha = originalSha
-})
-
 CheckSchema.methods.runUpdateChecks = async function() {
   if (this.status !== 'in_progress') return
   const client = github(this.installation_id)

@@ -75,7 +75,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
     data: {
       text: `
         Hello! You have a new review request on ${this.owner.login}'s PR.
-        Please access it here https://approvli.herokuapp.com/checks/${this._id}`,
+        Please access it here https://serene-hermann-3520e0.netlify.com/request/${this._id}`,
     },
   })
 }

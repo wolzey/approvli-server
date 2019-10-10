@@ -7,4 +7,5 @@ module.exports = function(app) {
   // ROUTES
   app.use('/auth', require('./auth'))
   app.use('/events', require('./events'))
+  app.use('/checks', require('./checks'))
 }

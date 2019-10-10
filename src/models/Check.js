@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const github = require('../services/github')
+const axios = require('axios')
 
 const Schema = mongoose.Schema
 
@@ -55,6 +56,30 @@ const CheckSchema = new Schema({
   },
 })
 
+CheckSchema.pre('save', async function(next) {
+  if (this.isNew) {
+    try {
+      await this.sendSlackNotification()
+    } catch {
+      console.log('could not send slack notification')
+    }
+  }
+
+  next()
+})
+
+CheckSchema.methods.sendSlackNotification = async function() {
+  return await axios({
+    method: 'POST',
+    url: process.env.SLACK_WEBHOOK_ENDPOINT,
+    data: {
+      text: `
+        Hello! You have a new review request on ${this.owner.login}'s PR.
+        Please access it here https://approvli.herokuapp.com/checks/${this._id}`,
+    },
+  })
+}
+
 CheckSchema.statics.findOrCreate = async function(query, data) {
   const _this = this
   return this.findOne(query, async function(err, check) {
@@ -66,7 +91,9 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
         return data
       })
     } else {
-      await check.runUpdateChecks()
+      if (!check.conclusion) {
+        await check.runUpdateChecks()
+      }
       // Need to make sure the hash updates
       check.set(data)
       check.save(async () => await check.sendToGithub())
@@ -74,16 +101,22 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
   })
 }
 
-CheckSchema.methods.updateDecision = async function() {
+CheckSchema.methods.updateDecision = async function(data) {
   const client = github(this.installation_id)
-
+  const conclusion = data.approved ? 'success' : 'failure'
   await client.checks.update({
     owner: this.owner.login,
     repo: this.repo,
     check_run_id: this.check_run_id,
-    conclusion: this.conclusion,
+    conclusion,
     status: 'completed',
   })
+
+  this.set({
+    conclusion: data.approved ? 'success' : 'failure',
+  })
+
+  this.save()
 }
 
 CheckSchema.methods.runUpdateChecks = async function() {
@@ -119,8 +152,6 @@ CheckSchema.methods.sendToGithub = async function() {
   this.check_run_id = id
   this.save()
 }
-
-CheckSchema.methods.sendSlackNotification = function() {}
 
 CheckSchema.methods.updateInGithub = function() {}
 

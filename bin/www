@@ -4,8 +4,6 @@
  * Module dependencies.
  */
 
-console.log('HELLOOOOOOOOO')
-
 var app = require('../app')
 var debug = require('debug')('approvli-server:server')
 var http = require('http')

@@ -68,14 +68,13 @@ CheckSchema.methods.runUpdateChecks = async function() {
   })
 }
 
+CheckSchema.pre('save', function(next) {
+  console.log('PRE SAVE HOOK')
+  next()
+})
+
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id)
-  console.log('SENDING TO GITHUB')
-  if (this.check_run_id) {
-    await this.runUpdateChecks()
-  }
-
-  console.log('CREATING NEW CHECK')
   const { id } = await client.checks.create({
     head_sha: this.head_sha,
     owner: this.owner.login,
@@ -85,6 +84,10 @@ CheckSchema.methods.sendToGithub = async function() {
     summary: this.summary,
     name: this.name,
   })
+
+  if (this.check_run_id) {
+    await this.runUpdateChecks()
+  }
 
   this.check_run_id = id
   this.save()

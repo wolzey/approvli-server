@@ -74,6 +74,18 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
   })
 }
 
+CheckSchema.methods.updateDecision = async function() {
+  const client = github(this.installation_id)
+
+  await client.checks.update({
+    owner: this.owner.login,
+    repo: this.repo,
+    check_run_id: this.check_run_id,
+    conclusion: this.conclusion,
+    status: 'completed',
+  })
+}
+
 CheckSchema.methods.runUpdateChecks = async function() {
   if (!this.check_run_id) return
   if (this.status !== 'in_progress') return

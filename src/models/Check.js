@@ -57,7 +57,7 @@ CheckSchema.path('head_sha').set(function() {
   this._head_sha = originalSha
 })
 
-CheckSchema.pre('save', async function(next) {
+CheckSchema.pre('validate', async function(next) {
   console.log('HIIII')
   const { id } = await this.sendToGithub()
   console.log(id)

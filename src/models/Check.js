@@ -4,6 +4,9 @@ const github = require('../services/github')
 const Schema = mongoose.Schema
 
 const CheckSchema = new Schema({
+  check_run_id: {
+    type: Number,
+  },
   pull_request: {
     body: {
       type: String,

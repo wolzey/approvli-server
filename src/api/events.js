@@ -27,6 +27,7 @@ eventRouter.post('/', async (req, res) => {
       repo: pull_request.head.repo.name,
       status: 'in_progress',
       head_sha: pull_request.head.sha,
+      installation_id: installation.id,
       output: {
         title: 'Waiting on Design Approval',
         summary: 'Needs approval from a designer',
@@ -35,7 +36,10 @@ eventRouter.post('/', async (req, res) => {
       },
     },
     (err, check) => {
-      if (err) res.status(500).json(err)
+      if (err) {
+        console.log(err)
+        return res.status(500).json(err)
+      }
 
       check.sendToGithub()
 

@@ -16,6 +16,7 @@ const CheckSchema = new Schema({
   name: {
     type: String,
     default: 'Designer Approval',
+    required: true,
   },
   repo: {
     type: String,
@@ -24,6 +25,7 @@ const CheckSchema = new Schema({
   head_sha: {
     type: String,
     required: true,
+    unique: true,
   },
   summary: {
     title: String,
@@ -52,6 +54,7 @@ CheckSchema.methods.sendToGithub = async function() {
     started_at: this.started_at,
     status: this.status,
     summary: this.summary,
+    name: this.name,
   })
 }
 

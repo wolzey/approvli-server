@@ -12,6 +12,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/approvli', {
   useCreateIndex: true,
 })
 
+console.log('HII')
+
 const app = express()
 
 app.use(logger('dev'))

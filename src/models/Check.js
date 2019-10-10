@@ -66,9 +66,8 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
         return data
       })
     } else {
-      console.log('hi')
       await check.runUpdateChecks()
-      check.update(data, async () => {
+      check.updateOne(data, async () => {
         check.sendToGithub()
       })
     }

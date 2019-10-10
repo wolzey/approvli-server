@@ -103,7 +103,7 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
 
 CheckSchema.methods.updateDecision = async function(data) {
   const client = github(this.installation_id)
-  const conclusion = data.approved ? 'success' : 'failure',
+  const conclusion = data.approved ? 'success' : 'failure'
   await client.checks.update({
     owner: this.owner.login,
     repo: this.repo,
@@ -113,7 +113,7 @@ CheckSchema.methods.updateDecision = async function(data) {
   })
 
   this.set({
-    conclusion: data.approved ? 'success' : 'failure'
+    conclusion: data.approved ? 'success' : 'failure',
   })
 
   this.save()

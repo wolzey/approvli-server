@@ -42,6 +42,8 @@ eventRouter.post('/', async (req, res) => {
         // return res.status(500).json(err)
       }
 
+      console.log('check', check)
+
       check.sendToGithub()
 
       res.status(200).json('ok')

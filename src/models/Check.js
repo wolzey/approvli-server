@@ -51,7 +51,7 @@ const CheckSchema = new Schema({
 
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id)
-
+  console.log('CREATING IN GITHUB')
   return await client.checks.create({
     head_sha: this.head_sha,
     owner: this.owner.login,

@@ -91,7 +91,9 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
         return data
       })
     } else {
-      await check.runUpdateChecks()
+      if (!check.conclusion) {
+        await check.runUpdateChecks()
+      }
       // Need to make sure the hash updates
       check.set(data)
       check.save(async () => await check.sendToGithub())

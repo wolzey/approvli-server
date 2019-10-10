@@ -113,6 +113,7 @@ CheckSchema.methods.sendToGithub = async function() {
     summary: this.summary,
     name: this.name,
     conclusion: this.conclusion,
+    output: this.output,
   })
 
   this.check_run_id = id

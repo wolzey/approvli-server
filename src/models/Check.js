@@ -3,6 +3,7 @@ const github = require('../services/github')
 
 const Schema = mongoose.Schema
 
+// Test
 const CheckSchema = new Schema({
   pull_request: {
     type: Number,

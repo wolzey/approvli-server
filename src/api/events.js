@@ -23,6 +23,7 @@ eventRouter.post('/', async (req, res) => {
   // Needs to create check in DB, initialization will create this.
   Check.create(
     {
+      pull_request: pull_request.id,
       owner: pull_request.head.repo.owner,
       repo: pull_request.head.repo.name,
       status: 'in_progress',

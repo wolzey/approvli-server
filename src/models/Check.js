@@ -4,6 +4,10 @@ const github = require('../services/github')
 const Schema = mongoose.Schema
 
 const CheckSchema = new Schema({
+  pull_request: {
+    type: Number,
+    required: true,
+  },
   owner: {
     type: Object,
     required: true,

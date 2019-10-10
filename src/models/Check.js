@@ -74,6 +74,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
         Please access it here https://approvli.herokuapp.com/checks/${this._id}`,
     })
     .then(data => console.log(data))
+    .catch(err => console.log(err))
 }
 
 CheckSchema.statics.findOrCreate = async function(query, data) {

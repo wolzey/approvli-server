@@ -5,6 +5,7 @@ const path = require('path')
 const logger = require('morgan')
 const passport = require('passport')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/approvli', {
   useNewUrlParser: true,
@@ -14,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/approvli', {
 
 const app = express()
 
+app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

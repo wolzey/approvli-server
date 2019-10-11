@@ -7,6 +7,7 @@ const passport = require('passport')
 const mongoose = require('mongoose')
 const cors = require('cors')
 
+// Mongoose connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/approvli', {
   useNewUrlParser: true,
   useUnifiedTopology: true,

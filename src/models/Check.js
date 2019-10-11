@@ -114,6 +114,7 @@ CheckSchema.methods.updateDecision = async function(data) {
     status: 'completed',
   })
 
+  // Does this work
   await client.issues.createComment({
     body: data.comment,
     issue_number: this.pull_request.id,

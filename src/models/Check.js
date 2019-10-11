@@ -115,12 +115,16 @@ CheckSchema.methods.updateDecision = async function(data) {
   })
 
   // Does this work
-  await client.issues.createComment({
-    body: data.comment,
-    issue_number: this.pull_request.id,
-    repo: this.repo,
-    owner: this.owner.login,
-  })
+  try {
+    await client.issues.createComment({
+      body: data.comment,
+      issue_number: this.pull_request.id,
+      repo: this.repo,
+      owner: this.owner.login,
+    })
+  } catch (error) {
+    console.log(error.message)
+  }
 
   this.set({
     conclusion: data.approved ? 'success' : 'failure',

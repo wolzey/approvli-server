@@ -8,6 +8,10 @@ const CheckSchema = new Schema({
   check_run_id: {
     type: Number,
   },
+  user: {
+    type: Object,
+    required: true,
+  },
   pull_request: {
     body: {
       type: String,

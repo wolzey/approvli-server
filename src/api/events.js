@@ -30,6 +30,7 @@ eventRouter.post('/', async (req, res) => {
         body: pull_request.body,
         number: pull_request.number,
       },
+      user: pull_request.user,
       owner: pull_request.head.repo.owner,
       repo: pull_request.head.repo.name,
       status: 'in_progress',

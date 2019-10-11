@@ -72,7 +72,7 @@ CheckSchema.pre('save', async function(next) {
 })
 
 // Methods
-
+// new line
 CheckSchema.methods.sendSlackNotification = async function() {
   return await axios({
     method: 'POST',

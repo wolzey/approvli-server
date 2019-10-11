@@ -114,6 +114,13 @@ CheckSchema.methods.updateDecision = async function(data) {
     status: 'completed',
   })
 
+  await client.issues.createComment({
+    body: data.comment,
+    issue_number: this.pull_request.id,
+    repo: this.repo,
+    owner: this.owner.login,
+  })
+
   this.set({
     conclusion: data.approved ? 'success' : 'failure',
   })

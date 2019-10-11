@@ -9,7 +9,7 @@ eventRouter.post('/', async (req, res) => {
   const body = req.body
   const { pull_request, installation } = body
 
-  console.log(pull_request)
+  console.log('PRRRRR', pull_request)
 
   if (!WATCHABLE_EVENTS.includes(event)) return res.json('event not supported')
 

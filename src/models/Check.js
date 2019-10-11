@@ -15,6 +15,9 @@ const CheckSchema = new Schema({
     id: {
       type: Number,
     },
+    number: {
+      type: Number,
+    },
   },
   owner: {
     type: Object,
@@ -118,7 +121,8 @@ CheckSchema.methods.updateDecision = async function(data) {
   try {
     await client.issues.createComment({
       body: data.comment,
-      issue_number: this.pull_request.id,
+      issue_number: this.pull_request.number,
+      number: this.pull_request.number,
       repo: this.repo,
       owner: this.owner.login,
     })

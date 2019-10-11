@@ -79,7 +79,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
     url: process.env.SLACK_WEBHOOK_ENDPOINT,
     data: {
       text: `
-        Hello! You have a new review request on ${this.owner.login}'s PR.
+        Hello! You have a new review request on ${this.user.login}'s PR.
         Please access it here https://approvli.netlify.com/reviews/${this._id}`,
     },
   })

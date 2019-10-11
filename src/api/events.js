@@ -7,9 +7,9 @@ const WATCHABLE_EVENTS = ['pull_request']
 eventRouter.post('/', async (req, res) => {
   const event = req.header('X-GitHub-Event')
   const body = req.body
-  const { pull_request, repository, installation } = body
+  const { pull_request, installation } = body
 
-  const githubClient = github(installation.id)
+  console.log(pull_request)
 
   if (!WATCHABLE_EVENTS.includes(event)) return res.json('event not supported')
 
@@ -22,7 +22,6 @@ eventRouter.post('/', async (req, res) => {
   if (!hasDesignLabel) return res.json('Nothing to do... Label not added')
   // Needs to create check in DB, initialization will create this.
 
-  console.log(pull_request)
   await Check.findOrCreate(
     {
       'pull_request.id': pull_request.id,

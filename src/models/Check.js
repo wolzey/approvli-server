@@ -133,6 +133,7 @@ CheckSchema.methods.updateDecision = async function(data) {
       owner: this.owner.login,
     })
   } catch (error) {
+    // This is an error
     console.log(error.message)
   }
 

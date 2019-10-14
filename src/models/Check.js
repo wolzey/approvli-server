@@ -92,23 +92,27 @@ CheckSchema.methods.sendSlackNotification = async function() {
       'base64'
     ).toString()
 
-    Promise.all(slackUsernames.split('\n').filter(name => !!name), username => {
-      return axios({
-        method: 'POST',
-        url: 'https://slack.com/api/chat.postMessage',
-        data: {
-          token: process.env.SLACK_BOT_TOKEN, // need to get auth token and save in check
-          username: 'Approvli',
-          channel: username,
-          text: `
+    const results = await Promise.all(
+      slackUsernames.split('\n').filter(name => !!name),
+      username => {
+        return axios({
+          method: 'POST',
+          url: 'https://slack.com/api/chat.postMessage',
+          data: {
+            token: process.env.SLACK_BOT_TOKEN, // need to get auth token and save in check
+            username: 'Approvli',
+            channel: username,
+            text: `
           Hello!\n\n You have a new review request on ${this.user.login}'s PR.\n
           Please access it here https://approvli.netlify.com/reviews/${this._id}`,
-        },
-      })
-    }).then(results => {
-      console.log(results)
-    })
+          },
+        })
+      }
+    )
+
+    console.log(results)
   } catch (err) {
+    console.error(err)
     console.error('Error retrieving Slack Usernames')
   }
 }

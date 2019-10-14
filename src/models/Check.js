@@ -81,11 +81,16 @@ CheckSchema.methods.sendSlackNotification = async function() {
   const client = github(this.installation_id)
 
   try {
-    const slackUsername = await client.repos.getContents({
+    const designerBuffer = await client.repos.getContents({
       owner: this.owner.login,
       repo: this.repo,
       path: '.designers',
     })
+
+    const slackUsername = Buffer.from(
+      designerBuffer.data.content,
+      'base64'
+    ).toString()
 
     console.log(slackUsername)
   } catch (err) {

@@ -103,7 +103,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
             method: 'POST',
             url: 'https://slack.com/api/chat.postMessage',
             headers: {
-              Authorization: process.env.SLACK_OAUTH_TOKEN,
+              Authorization: `Bearer ${process.env.SLACK_OAUTH_TOKEN}`,
             },
             data: {
               username: 'Approvli',

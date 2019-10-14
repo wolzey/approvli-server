@@ -78,6 +78,20 @@ CheckSchema.pre('save', async function(next) {
 // Methods
 // new line
 CheckSchema.methods.sendSlackNotification = async function() {
+  const client = github(this.installation_id)
+
+  try {
+    const slackUsername = await client.repos.getContents({
+      owner: this.owner.login,
+      repo: this.repo,
+      path: '.designers',
+    })
+
+    console.log(slackUsername)
+  } catch (err) {
+    console.error('Error retrieving Slack Usernames')
+  }
+
   return await axios({
     method: 'POST',
     url: process.env.SLACK_WEBHOOK_ENDPOINT,

@@ -46,11 +46,6 @@ eventRouter.post('/', async (req, res) => {
   )
 
   res.json('ok')
-  // If Designer requested we use the api to create a new check
-  // Check is in progress
-  // Send notitification to Slack
-  // Once Kevin (designer approves) - Change status to his selection
-  // Add PR comments if any
 })
 
 module.exports = eventRouter

@@ -78,15 +78,43 @@ CheckSchema.pre('save', async function(next) {
 // Methods
 // new line
 CheckSchema.methods.sendSlackNotification = async function() {
-  return await axios({
-    method: 'POST',
-    url: process.env.SLACK_WEBHOOK_ENDPOINT,
-    data: {
-      text: `
-        Hello! You have a new review request on ${this.user.login}'s PR.
-        Please access it here https://approvli.netlify.com/reviews/${this._id}`,
-    },
-  })
+  const client = github(this.installation_id)
+
+  try {
+    const designerBuffer = await client.repos.getContents({
+      owner: this.owner.login,
+      repo: this.repo,
+      path: '.designers',
+    })
+
+    const slackUsernames = Buffer.from(
+      designerBuffer.data.content,
+      'base64'
+    ).toString()
+
+    await Promise.all(
+      slackUsernames
+        .split('\n')
+        .filter(name => !!name)
+        .map(username => {
+          return axios({
+            method: 'POST',
+            url: 'https://slack.com/api/chat.postMessage',
+            headers: {
+              Authorization: `Bearer ${process.env.SLACK_OAUTH_TOKEN}`,
+            },
+            data: {
+              username: 'Approvli',
+              channel: `@${username}`,
+              text: `
+          Hello!\n\n You have a new review request on ${this.user.login}'s PR.\nPlease access it here https://approvli.netlify.com/reviews/${this._id}`,
+            },
+          })
+        })
+    )
+  } catch (err) {
+    console.error('Error retrieving Slack Usernames', err)
+  }
 }
 
 CheckSchema.statics.findOrCreate = async function(query, data) {

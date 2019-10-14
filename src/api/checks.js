@@ -10,9 +10,6 @@ checkRouter.get('/:id', (req, res) => {
 })
 
 checkRouter.post('/:id', (req, res) => {
-  const { approved, comment } = req.body
-
-  // With the comment we need to create a new PR comment
   Check.findOne({ _id: req.params.id }, async (err, check) => {
     if (err) throw err
     if (check) {

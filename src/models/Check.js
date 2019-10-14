@@ -103,7 +103,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
           data: {
             token: process.env.SLACK_BOT_TOKEN, // need to get auth token and save in check
             username: 'Approvli',
-            channel: username,
+            channel: `@${username}`,
             text: `
           Hello!\n\n You have a new review request on ${this.user.login}'s PR.\n
           Please access it here https://approvli.netlify.com/reviews/${this._id}`,

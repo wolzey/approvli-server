@@ -100,8 +100,10 @@ CheckSchema.methods.sendSlackNotification = async function() {
         return axios({
           method: 'POST',
           url: 'https://slack.com/api/chat.postMessage',
+          headers: {
+            Authorization: process.env.SLACK_OAUTH_TOKEN,
+          },
           data: {
-            token: process.env.SLACK_BOT_TOKEN, // need to get auth token and save in check
             username: 'Approvli',
             channel: `@${username}`,
             text: `

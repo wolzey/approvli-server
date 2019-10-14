@@ -92,9 +92,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
       'base64'
     ).toString()
 
-    console.log(slackUsernames)
-
-    const results = await Promise.all(
+    await Promise.all(
       slackUsernames
         .split('\n')
         .filter(name => !!name)
@@ -114,11 +112,8 @@ CheckSchema.methods.sendSlackNotification = async function() {
           })
         })
     )
-
-    console.log(results)
   } catch (err) {
-    console.error(err)
-    console.error('Error retrieving Slack Usernames')
+    console.error('Error retrieving Slack Usernames', err)
   }
 }
 

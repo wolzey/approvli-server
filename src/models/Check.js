@@ -108,7 +108,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
           },
         })
       }
-    )
+    ).catch(err => console.log(err))
 
     console.log(results)
   } catch (err) {

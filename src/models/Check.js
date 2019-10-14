@@ -109,8 +109,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
               username: 'Approvli',
               channel: `@${username}`,
               text: `
-          Hello!\n\n You have a new review request on ${this.user.login}'s PR.
-          Please access it here https://approvli.netlify.com/reviews/${this._id}`,
+          Hello!\n\n You have a new review request on ${this.user.login}'s PR.\nPlease access it here https://approvli.netlify.com/reviews/${this._id}`,
             },
           })
         })

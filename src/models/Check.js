@@ -92,7 +92,7 @@ CheckSchema.methods.sendSlackNotification = async function() {
       'base64'
     ).toString()
 
-    Promise.all(slackUsernames.split('\n'), username => {
+    Promise.all(slackUsernames.split('\n').filter(name => !!name), username => {
       return axios({
         method: 'POST',
         url: 'https://slack.com/api/chat.postMessage',
@@ -111,16 +111,6 @@ CheckSchema.methods.sendSlackNotification = async function() {
   } catch (err) {
     console.error('Error retrieving Slack Usernames')
   }
-
-  return await axios({
-    method: 'POST',
-    url: process.env.SLACK_WEBHOOK_ENDPOINT,
-    data: {
-      text: `
-        Hello! You have a new review request on ${this.user.login}'s PR.
-        Please access it here https://approvli.netlify.com/reviews/${this._id}`,
-    },
-  })
 }
 
 CheckSchema.statics.findOrCreate = async function(query, data) {

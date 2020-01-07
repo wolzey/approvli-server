@@ -80,7 +80,7 @@ CheckSchema.pre("save", async function(next) {
 CheckSchema.methods.sendDesignEmail = async function() {
   const client = github(this.installation_id);
   const id = this._id;
-  const name = this.owner.login;
+  const name = this.user.login;
 
   const designerBuffer = await client.repos.getContents({
     owner: name,

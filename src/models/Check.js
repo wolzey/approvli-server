@@ -112,16 +112,22 @@ CheckSchema.statics.findOrCreate = async function(query, data) {
     if (!check) {
       _this.create(data, (err, newCheck) => {
         if (err) throw err;
+        console.log("new check sending to github");
         newCheck.sendToGithub();
         return data;
       });
     } else {
       if (!check.conclusion) {
+        console.log("updating check");
         await check.runUpdateChecks();
       }
       // Need to make sure the hash updates
       check.set(data);
-      check.save(async () => await check.sendToGithub());
+      check.save(
+        async () =>
+          console.log("sending saved check to github") ||
+          (await check.sendToGithub())
+      );
     }
   });
 };
@@ -174,6 +180,7 @@ CheckSchema.methods.runUpdateChecks = async function() {
 };
 
 CheckSchema.methods.sendToGithub = async function() {
+  console.log("Sending check to github");
   const client = github(this.installation_id);
   console.log(this.head_sha, this.owner.login, this.repo);
   const {

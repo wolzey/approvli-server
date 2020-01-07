@@ -4,6 +4,7 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 module.exports = {
   async sendDesignMessage(email, { id, name }) {
+    console.log("Sending email to:", email);
     const template = {
       from: "approver@approvli.com",
       to: email,

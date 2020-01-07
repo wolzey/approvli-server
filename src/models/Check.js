@@ -98,11 +98,9 @@ CheckSchema.methods.sendDesignEmail = async function() {
     .filter(name => !!name)
     .map(async email => {
       try {
-        console.log(response);
-        return await Mailer.sendDesignMessage(email, { id, name });
+        await Mailer.sendDesignMessage(email, { id, name });
       } catch (error) {
-        console.log(error);
-        return null;
+        throw error;
       }
     });
 };

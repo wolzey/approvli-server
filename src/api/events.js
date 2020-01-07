@@ -30,7 +30,7 @@ eventRouter.post("/", async (req, res) => {
       },
       user: pull_request.user,
       owner: pull_request.head.repo.owner,
-      repo: pull_request.head.repo.full_name || pull_request.head.repo.name,
+      repo: pull_request.head.repo.name,
       status: "in_progress",
       head_sha: pull_request.head.sha,
       installation_id: installation.id,

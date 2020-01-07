@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "prod": "forever start ./bin/www",
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www"
   },
@@ -24,6 +25,7 @@
     "pm2": "^3.5.1"
   },
   "devDependencies": {
+    "forever": "^2.0.0",
     "nodemon": "^1.19.3"
   }
 }

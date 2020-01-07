@@ -83,7 +83,7 @@ CheckSchema.methods.sendDesignEmail = async function() {
   const name = this.user.login;
 
   const designerBuffer = await client.repos.getContents({
-    owner: name,
+    owner: this.owner.login,
     repo: this.repo,
     path: ".designers"
   });

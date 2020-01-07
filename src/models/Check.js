@@ -144,7 +144,6 @@ CheckSchema.methods.updateDecision = async function(data) {
         conclusion === "success" ? "**Approved:**" : "**Rejected:**"
       }\n\n${data.comment}`,
       issue_number: this.pull_request.number,
-      number: this.pull_request.number,
       repo: this.repo,
       owner: this.owner.login
     });

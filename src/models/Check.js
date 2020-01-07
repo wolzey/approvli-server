@@ -175,6 +175,7 @@ CheckSchema.methods.runUpdateChecks = async function() {
 
 CheckSchema.methods.sendToGithub = async function() {
   const client = github(this.installation_id);
+  console.log(this.head_sha, this.owner.login, this.repo);
   const {
     data: { id }
   } = await client.checks.create({

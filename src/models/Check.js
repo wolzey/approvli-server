@@ -68,7 +68,8 @@ CheckSchema.pre("save", async function(next) {
   if (this.isNew) {
     try {
       await this.sendDesignEmail();
-    } catch {
+    } catch (error) {
+      console.log(error);
       console.log("could not send slack notification");
     }
   }
